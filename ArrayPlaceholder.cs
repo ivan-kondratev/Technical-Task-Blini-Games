@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ArrayPlaceholder : MonoBehaviour
@@ -10,46 +10,47 @@ public class ArrayPlaceholder : MonoBehaviour
 
     private void PlacingItemsInTheArray(GameObject[] arrayFrom, GameObject[] arrayTo)
     {
-        List<int> nullElementIndexesOfArrayTo = new List<int>();
+        List<int> nullIndexesArrayTo = GetNullIndexes(arrayTo);
 
-        for (int i = 0; i < arrayTo.Length; i++)
-            if (arrayTo[i] == null)
-                nullElementIndexesOfArrayTo.Add(i);
-
-        Shuffle(nullElementIndexesOfArrayTo);
+        Shuffle(nullIndexesArrayTo);
         Shuffle(arrayFrom);
 
         int n = 0, arrayFromLength = arrayFrom.Length;
-        foreach (var item in nullElementIndexesOfArrayTo)
+        foreach (var item in nullIndexesArrayTo)
             if (n < arrayFromLength)
                 arrayTo[item] = arrayFrom[n++];
+    }
+
+    private List<int> GetNullIndexes (GameObject[] array)
+    {
+        List<int> nullIndexesList = new List<int>();
+
+        for (int i = 0; i < array.Length; i++)
+            if (array[i] == null)
+                nullIndexesList.Add(i);
+
+        return nullIndexesList;
     }
 
     //the Fisher Yates Shuffle
     private void Shuffle<T>(List<T> list)
     {
-        int n = list.Count;
-        System.Random random = new System.Random();
-        while (n > 1)
+        for (int i = list.Count - 1; i > 0; i--)
         {
-            n--;
-            int k = random.Next(n + 1);
-            T tempItem = list[k];
-            list[k] = list[n];
-            list[n] = tempItem;
+            int r = Random.Range(0, i);
+            T tmp = list[i];
+            list[i] = list[r];
+            list[r] = tmp;
         }
     }
-    private void Shuffle(GameObject[] gameObjects)
+    private void Shuffle<T>(T[] arr)
     {
-        int n = gameObjects.Length;
-        System.Random random = new System.Random();
-        while (n > 1)
+        for (int i = arr.Length - 1; i > 0; i--)
         {
-            n--;
-            int k = random.Next(n + 1);
-            GameObject tempElement = gameObjects[k];
-            gameObjects[k] = gameObjects[n];
-            gameObjects[n] = tempElement;
+            int r = Random.Range(0, i);
+            T tmp = arr[i];
+            arr[i] = arr[r];
+            arr[r] = tmp;
         }
     }
 }
